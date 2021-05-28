@@ -1,0 +1,25 @@
+id;name;category_id
+1;HDD;1
+2;SSD;1
+3;USB flash;1
+4;Memory card;1
+5;Laptop;2
+6;Smartphone;2
+7;Tablet;2
+8;Keyboard;3
+9;Mouse;3
+10;Microphone;3
+11;Scanner;3
+12;Python;4
+13;JS;4
+14;Java;4
+15;Ruby;4
+16;Ruby;4
+17;C#;4
+18;C++;4
+19;Pascal;4
+20;USB;5
+21;Optical;5
+22;HDMI;5
+23;UTP;5
+24;VGA;5
