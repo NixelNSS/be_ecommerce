@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
+public class LoginRequestDTO {
 
     @Getter
     @Setter

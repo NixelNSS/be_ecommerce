@@ -1,7 +1,8 @@
 package com.nikolakostic.isa_ecommerce.security.controller;
 
 import com.nikolakostic.isa_ecommerce.security.dto.ChangePasswordDTO;
-import com.nikolakostic.isa_ecommerce.security.dto.LoginDTO;
+import com.nikolakostic.isa_ecommerce.security.dto.LoginRequestDTO;
+import com.nikolakostic.isa_ecommerce.security.dto.LoginResponseDTO;
 import com.nikolakostic.isa_ecommerce.security.dto.RegisterDTO;
 import com.nikolakostic.isa_ecommerce.security.service.AuthenticationService;
 import com.nikolakostic.isa_ecommerce.user.entity.User;
@@ -37,10 +38,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("authenticate")
-    public ResponseEntity<User> authenticate(@Valid @RequestBody LoginDTO dto) {
+    public ResponseEntity<LoginResponseDTO> createAuthenticationToken(@Valid @RequestBody LoginRequestDTO dto) {
         try {
             return ResponseEntity.ok().body(authenticationService.authenticate(dto));
-        } catch (InvalidCredentialsException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }

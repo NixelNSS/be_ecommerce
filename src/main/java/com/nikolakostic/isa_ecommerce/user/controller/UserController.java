@@ -25,8 +25,8 @@ public class UserController {
     public ResponseEntity<User> update(@Valid @RequestBody UpdateProfileDTO dto) {
         try {
             return ResponseEntity.ok().body(this.userService.update(dto));
-        } catch (InvalidCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 

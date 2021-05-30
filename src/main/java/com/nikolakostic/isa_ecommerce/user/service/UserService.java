@@ -53,13 +53,10 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public User getAuthenticatedUser() throws InvalidCredentialsException {
+    public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            ConcreteUserDetails userDetails = (ConcreteUserDetails) authentication.getPrincipal();
-            return userRepository.findById(userDetails.getId()).get();
-        }
-        throw new InvalidCredentialsException();
+        ConcreteUserDetails userDetails = (ConcreteUserDetails) authentication.getPrincipal();
+        return userRepository.findById(userDetails.getId()).get();
     }
 
 }

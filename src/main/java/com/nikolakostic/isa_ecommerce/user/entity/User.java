@@ -1,5 +1,6 @@
 package com.nikolakostic.isa_ecommerce.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,7 @@ public class User {
     @Setter
     private String email;
 
+    @JsonIgnore
     @Column(name = "password")
     @Getter
     @Setter

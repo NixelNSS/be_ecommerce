@@ -2,7 +2,6 @@ package com.nikolakostic.isa_ecommerce.security.service;
 
 import com.nikolakostic.isa_ecommerce.security.model.ConcreteUserDetails;
 import com.nikolakostic.isa_ecommerce.user.entity.User;
-import com.nikolakostic.isa_ecommerce.user.exception.InvalidCredentialsException;
 import com.nikolakostic.isa_ecommerce.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +27,6 @@ public class ConcreteUserDetailsService implements UserDetailsService {
                     optionalUser.get().getPassword()
             );
         }
-        throw new InvalidCredentialsException();
+        throw new UsernameNotFoundException("User with provided email does not exist!");
     }
 }
