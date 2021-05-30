@@ -59,4 +59,7 @@ public class UserService {
         return userRepository.findById(userDetails.getId()).get();
     }
 
+    public User getById(Long id) {
+        return this.userRepository.getById(id);
+    }
 }

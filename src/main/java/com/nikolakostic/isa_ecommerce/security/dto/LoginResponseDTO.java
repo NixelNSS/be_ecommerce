@@ -4,15 +4,11 @@ import lombok.Data;
 
 @Data
 public class LoginResponseDTO {
-	private String token;
-	private String type;
-	private Long id;
-	private String email;
-
-	public LoginResponseDTO(String token, Long id, String email) {
-		this.token = token;
-		this.type = "Bearer";
-		this.id = id;
-		this.email = email;
-	}
+	private final Long id;
+	private final String email;
+	private final String firstName;
+	private final String lastName;
+	private final String phone;
+	private final String address;
+	private final String token;
 }

@@ -4,6 +4,7 @@ import com.nikolakostic.isa_ecommerce.security.dto.ChangePasswordDTO;
 import com.nikolakostic.isa_ecommerce.security.dto.LoginRequestDTO;
 import com.nikolakostic.isa_ecommerce.security.dto.LoginResponseDTO;
 import com.nikolakostic.isa_ecommerce.security.model.ConcreteUserDetails;
+import com.nikolakostic.isa_ecommerce.user.entity.User;
 import com.nikolakostic.isa_ecommerce.user.exception.InvalidCredentialsException;
 import com.nikolakostic.isa_ecommerce.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,11 @@ public class AuthenticationService {
         );
         ConcreteUserDetails userDetails = (ConcreteUserDetails) userDetailsService.loadUserByUsername(dto.getEmail());
         final String jwt = jwtService.generateToken(userDetails);
-        return new LoginResponseDTO(jwt, userDetails.getId(), userDetails.getUsername());
+        User user = userService.getById(userDetails.getId());
+        return new LoginResponseDTO(
+                user.getId(), user.getEmail(), user.getFirstName(),
+                user.getLastName(), user.getPhone(), user.getAddress(), jwt
+        );
     }
 
     public void changePassword(ChangePasswordDTO dto) throws InvalidCredentialsException {
