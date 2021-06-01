@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="4" author="nikola_kostic">
+        <createTable tableName="users_favorite_categories">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_users_favorite_categories_user_id" referencedTableName="users" referencedColumnNames="id"/>
+            </column>
+            <column name="category_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_users_favorite_categories_category_id" referencedTableName="categories" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint
+                tableName="users_favorite_categories"
+                columnNames="user_id, category_id"
+                constraintName="users_favorite_categories_user_id_category_id"/>
+    </changeSet>
+
+</databaseChangeLog>

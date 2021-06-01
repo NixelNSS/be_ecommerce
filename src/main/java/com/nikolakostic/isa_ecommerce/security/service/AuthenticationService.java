@@ -36,7 +36,7 @@ public class AuthenticationService {
         User user = userService.getById(userDetails.getId());
         return new LoginResponseDTO(
                 user.getId(), user.getEmail(), user.getFirstName(),
-                user.getLastName(), user.getPhone(), user.getAddress(), jwt
+                user.getLastName(), user.getPhone(), user.getAddress(), user.getFavoriteCategories(), jwt
         );
     }
 

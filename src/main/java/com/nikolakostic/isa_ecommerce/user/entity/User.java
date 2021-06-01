@@ -1,6 +1,7 @@
 package com.nikolakostic.isa_ecommerce.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nikolakostic.isa_ecommerce.category.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -55,18 +57,30 @@ public class User {
     @Setter
     private String address;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_favorite_categories",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "category_id", referencedColumnName = "id"))
+    @Getter
+    @Setter
+    private List<Category> favoriteCategories;
+
     @Generated(GenerationTime.INSERT)
     @Column(name = "date_created")
     @Getter
     @Setter
     private Timestamp dateCreated;
 
-    public User(String firstName, String lastName, String email, String password, String phone, String address) {
+    public User(String firstName, String lastName, String email, String password, String phone, String address, List<Category> favoriteCategories) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
+        this.favoriteCategories = favoriteCategories;
     }
 }

@@ -32,7 +32,7 @@ public class AuthenticationController {
     public ResponseEntity<User> register(@Valid @RequestBody RegisterDTO dto) {
         try {
             return ResponseEntity.ok().body(this.userService.create(dto));
-        } catch (InvalidCredentialsException | UserExistsException e) {
+        } catch (InvalidCredentialsException | IllegalArgumentException | UserExistsException e) {
             return ResponseEntity.badRequest().build();
         }
     }

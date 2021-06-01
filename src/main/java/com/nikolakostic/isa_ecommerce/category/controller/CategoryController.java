@@ -14,7 +14,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping()
+    @GetMapping("all")
     public ResponseEntity<?> getAll() {
         try {
             return ResponseEntity.ok().body(this.categoryService.getAll());

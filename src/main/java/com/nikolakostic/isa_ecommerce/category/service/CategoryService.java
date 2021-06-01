@@ -17,4 +17,8 @@ public class CategoryService {
         return this.categoryRepository.findAll();
     }
 
+    public void validateCategories(List<Category> categoryList) throws IllegalArgumentException {
+        categoryList.forEach(category -> this.categoryRepository.findById(category.getId()).orElseThrow(IllegalArgumentException::new));
+    }
+
 }
