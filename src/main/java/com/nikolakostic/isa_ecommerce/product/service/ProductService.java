@@ -46,4 +46,8 @@ public class ProductService {
     private Double fixPrice(Double price) {
         return price == null ? 0D : price;
     }
+
+    public Product getById(Long id) {
+        return productRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
 }

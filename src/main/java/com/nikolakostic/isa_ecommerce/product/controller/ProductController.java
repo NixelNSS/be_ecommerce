@@ -25,6 +25,15 @@ public class ProductController {
         }
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.ok().body(this.productService.getById(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping("criteria/{nameOrDesc}")
     public ResponseEntity<?> getAllByNameOrDescriptionContainCriteria(@PathVariable("nameOrDesc") String criteria) {
         try {
