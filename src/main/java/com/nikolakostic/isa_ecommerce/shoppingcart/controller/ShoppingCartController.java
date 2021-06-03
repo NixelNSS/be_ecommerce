@@ -1,7 +1,6 @@
 package com.nikolakostic.isa_ecommerce.shoppingcart.controller;
 
 import com.nikolakostic.isa_ecommerce.shoppingcart.dto.AddRemoveProductDTO;
-import com.nikolakostic.isa_ecommerce.shoppingcart.entity.ShoppingCart;
 import com.nikolakostic.isa_ecommerce.shoppingcart.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

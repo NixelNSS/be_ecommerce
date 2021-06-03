@@ -1,5 +1,6 @@
 package com.nikolakostic.isa_ecommerce.shoppingcart.service;
 
+import com.nikolakostic.isa_ecommerce.order.service.OrderService;
 import com.nikolakostic.isa_ecommerce.product.entity.Product;
 import com.nikolakostic.isa_ecommerce.product.service.ProductService;
 import com.nikolakostic.isa_ecommerce.shoppingcart.entity.ShoppingCart;
@@ -23,6 +24,9 @@ public class ShoppingCartService {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
+    OrderService orderService;
 
     public ShoppingCart addProduct(Long productId) {
         Product product = this.productService.getById(productId);
@@ -55,12 +59,19 @@ public class ShoppingCartService {
 
     public ShoppingCart buy() {
         ShoppingCart shoppingCart = this.userService.getAuthenticatedUser().getShoppingCart();
+        this.orderService.create(shoppingCart);
         shoppingCart.setProducts(new ArrayList<>());
         this.shoppingCartRepository.save(shoppingCart);
+        shoppingCart.setCount(0);
+        shoppingCart.setAmount(0D);
         return shoppingCart;
     }
 
     public ShoppingCart getByUser() {
         return this.userService.getAuthenticatedUser().getShoppingCart();
+    }
+
+    public ShoppingCart create(ShoppingCart shoppingCart) {
+        return this.shoppingCartRepository.save(shoppingCart);
     }
 }

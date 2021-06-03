@@ -18,7 +18,8 @@ import java.util.List;
 public class ShoppingCart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shopping_cart_id_seq")
+    @SequenceGenerator(name = "shopping_cart_id_seq", allocationSize = 1, initialValue = 3)
     @Column(name = "id")
     @Getter
     @Setter
@@ -61,6 +62,12 @@ public class ShoppingCart {
         });
     }
 
+    public ShoppingCart(Double amount, Integer count, User owner, List<Product> products) {
+        this.amount = amount;
+        this.count = count;
+        this.owner = owner;
+        this.products = products;
+    }
 }
 
 

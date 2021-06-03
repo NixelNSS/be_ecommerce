@@ -3,6 +3,8 @@ package com.nikolakostic.isa_ecommerce.user.service;
 import com.nikolakostic.isa_ecommerce.category.service.CategoryService;
 import com.nikolakostic.isa_ecommerce.security.dto.RegisterDTO;
 import com.nikolakostic.isa_ecommerce.security.model.ConcreteUserDetails;
+import com.nikolakostic.isa_ecommerce.shoppingcart.entity.ShoppingCart;
+import com.nikolakostic.isa_ecommerce.shoppingcart.service.ShoppingCartService;
 import com.nikolakostic.isa_ecommerce.user.dto.UpdateProfileDTO;
 import com.nikolakostic.isa_ecommerce.user.exception.InvalidCredentialsException;
 import com.nikolakostic.isa_ecommerce.user.exception.UserExistsException;
@@ -13,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -23,6 +26,9 @@ public class UserService {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    ShoppingCartService shoppingCartService;
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -41,7 +47,11 @@ public class UserService {
                 dto.getAddress(),
                 dto.getFavoriteCategories()
         );
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        ShoppingCart shoppingCart = this.shoppingCartService.create(new ShoppingCart(0D, 0, user, new ArrayList<>()));
+        user.setShoppingCart(shoppingCart);
+        user = userRepository.save(user);
+        return user;
     }
 
     public User update(UpdateProfileDTO dto) throws IllegalArgumentException {

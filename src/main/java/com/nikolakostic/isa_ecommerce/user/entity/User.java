@@ -2,6 +2,7 @@ package com.nikolakostic.isa_ecommerce.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nikolakostic.isa_ecommerce.category.entity.Category;
+import com.nikolakostic.isa_ecommerce.order.entity.Order;
 import com.nikolakostic.isa_ecommerce.shoppingcart.entity.ShoppingCart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,8 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
+    @SequenceGenerator(name = "user_id_seq", allocationSize = 1, initialValue = 3)
     @Column(name = "id")
     @Getter
     @Setter
@@ -74,6 +76,12 @@ public class User {
     @OneToOne
     @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
     private ShoppingCart shoppingCart;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "owner")
+    private List<Order> orders;
 
     @Generated(GenerationTime.INSERT)
     @Column(name = "date_created")
