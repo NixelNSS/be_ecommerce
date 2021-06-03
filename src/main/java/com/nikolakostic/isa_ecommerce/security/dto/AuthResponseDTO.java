@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class LoginResponseDTO {
+public class AuthResponseDTO {
 	private final Long id;
 	private final String email;
 	private final String firstName;

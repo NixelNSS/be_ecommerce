@@ -2,10 +2,9 @@ package com.nikolakostic.isa_ecommerce.security.controller;
 
 import com.nikolakostic.isa_ecommerce.security.dto.ChangePasswordDTO;
 import com.nikolakostic.isa_ecommerce.security.dto.LoginRequestDTO;
-import com.nikolakostic.isa_ecommerce.security.dto.LoginResponseDTO;
+import com.nikolakostic.isa_ecommerce.security.dto.AuthResponseDTO;
 import com.nikolakostic.isa_ecommerce.security.dto.RegisterDTO;
 import com.nikolakostic.isa_ecommerce.security.service.AuthenticationService;
-import com.nikolakostic.isa_ecommerce.user.entity.User;
 import com.nikolakostic.isa_ecommerce.user.exception.InvalidCredentialsException;
 import com.nikolakostic.isa_ecommerce.user.exception.UserExistsException;
 import com.nikolakostic.isa_ecommerce.user.service.UserService;
@@ -29,7 +28,7 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("register")
-    public ResponseEntity<User> register(@Valid @RequestBody RegisterDTO dto) {
+    public ResponseEntity<AuthResponseDTO> register(@Valid @RequestBody RegisterDTO dto) {
         try {
             return ResponseEntity.ok().body(this.userService.create(dto));
         } catch (InvalidCredentialsException | IllegalArgumentException | UserExistsException e) {
@@ -38,7 +37,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("authenticate")
-    public ResponseEntity<LoginResponseDTO> createAuthenticationToken(@Valid @RequestBody LoginRequestDTO dto) {
+    public ResponseEntity<AuthResponseDTO> createAuthenticationToken(@Valid @RequestBody LoginRequestDTO dto) {
         try {
             return ResponseEntity.ok().body(authenticationService.authenticate(dto));
         } catch (Exception e) {

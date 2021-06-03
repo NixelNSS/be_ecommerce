@@ -1,8 +1,11 @@
 package com.nikolakostic.isa_ecommerce.user.service;
 
 import com.nikolakostic.isa_ecommerce.category.service.CategoryService;
+import com.nikolakostic.isa_ecommerce.security.dto.AuthResponseDTO;
+import com.nikolakostic.isa_ecommerce.security.dto.LoginRequestDTO;
 import com.nikolakostic.isa_ecommerce.security.dto.RegisterDTO;
 import com.nikolakostic.isa_ecommerce.security.model.ConcreteUserDetails;
+import com.nikolakostic.isa_ecommerce.security.service.AuthenticationService;
 import com.nikolakostic.isa_ecommerce.shoppingcart.entity.ShoppingCart;
 import com.nikolakostic.isa_ecommerce.shoppingcart.service.ShoppingCartService;
 import com.nikolakostic.isa_ecommerce.user.dto.UpdateProfileDTO;
@@ -30,11 +33,14 @@ public class UserService {
     @Autowired
     ShoppingCartService shoppingCartService;
 
+    @Autowired
+    AuthenticationService authenticationService;
+
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public User create(RegisterDTO dto) throws InvalidCredentialsException, UserExistsException, IllegalArgumentException {
+    public AuthResponseDTO create(RegisterDTO dto) throws InvalidCredentialsException, UserExistsException, IllegalArgumentException {
         if (!dto.getPassword().equals(dto.getConfirmPassword())) throw new InvalidCredentialsException();
         if (this.findByEmail(dto.getEmail()).isPresent()) throw new UserExistsException();
         this.categoryService.validateCategories(dto.getFavoriteCategories());
@@ -51,7 +57,7 @@ public class UserService {
         ShoppingCart shoppingCart = this.shoppingCartService.create(new ShoppingCart(0D, 0, user, new ArrayList<>()));
         user.setShoppingCart(shoppingCart);
         user = userRepository.save(user);
-        return user;
+        return this.authenticationService.authenticate(new LoginRequestDTO(user.getEmail(), user.getPassword()));
     }
 
     public User update(UpdateProfileDTO dto) throws IllegalArgumentException {

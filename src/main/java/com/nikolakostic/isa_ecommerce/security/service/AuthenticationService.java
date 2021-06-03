@@ -2,7 +2,7 @@ package com.nikolakostic.isa_ecommerce.security.service;
 
 import com.nikolakostic.isa_ecommerce.security.dto.ChangePasswordDTO;
 import com.nikolakostic.isa_ecommerce.security.dto.LoginRequestDTO;
-import com.nikolakostic.isa_ecommerce.security.dto.LoginResponseDTO;
+import com.nikolakostic.isa_ecommerce.security.dto.AuthResponseDTO;
 import com.nikolakostic.isa_ecommerce.security.model.ConcreteUserDetails;
 import com.nikolakostic.isa_ecommerce.user.entity.User;
 import com.nikolakostic.isa_ecommerce.user.exception.InvalidCredentialsException;
@@ -27,14 +27,14 @@ public class AuthenticationService {
     @Autowired
     private JWTService jwtService;
 
-    public LoginResponseDTO authenticate(LoginRequestDTO dto) {
+    public AuthResponseDTO authenticate(LoginRequestDTO dto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
         );
         ConcreteUserDetails userDetails = (ConcreteUserDetails) userDetailsService.loadUserByUsername(dto.getEmail());
         final String jwt = jwtService.generateToken(userDetails);
         User user = userService.getById(userDetails.getId());
-        return new LoginResponseDTO(
+        return new AuthResponseDTO(
                 user.getId(), user.getEmail(), user.getFirstName(),
                 user.getLastName(), user.getPhone(), user.getAddress(), user.getFavoriteCategories(), jwt
         );
