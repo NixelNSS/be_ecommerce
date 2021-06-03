@@ -44,8 +44,8 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllByCategoryIdsAndPriceBetween(@RequestParam(name = "startPrice", required = false) Double startPrice,
-                                                                @RequestParam(name = "endPrice", required = false) Double endPrice) {
+    public ResponseEntity<?> getAllByPriceBetween(@RequestParam(name = "startPrice", required = false) Double startPrice,
+                                                  @RequestParam(name = "endPrice", required = false) Double endPrice) {
         try {
             return ResponseEntity.ok().body(this.productService.getAllByPriceBetweenStartAndEnd(startPrice, endPrice));
         } catch (Exception e) {
@@ -65,9 +65,9 @@ public class ProductController {
     }
 
     @GetMapping("subcategory/{subcategoryIds}")
-    public ResponseEntity<?> getAllBySubcategoryIds(@PathVariable("subcategoryIds") List<Long> subcategoryIds,
-                                                    @RequestParam(name = "startPrice", required = false) Double startPrice,
-                                                    @RequestParam(name = "endPrice", required = false) Double endPrice) {
+    public ResponseEntity<?> getAllBySubcategoryIdsAndPriceBetween(@PathVariable("subcategoryIds") List<Long> subcategoryIds,
+                                                                   @RequestParam(name = "startPrice", required = false) Double startPrice,
+                                                                   @RequestParam(name = "endPrice", required = false) Double endPrice) {
         try {
             return ResponseEntity.ok().body(this.productService.getAllBySubcategoryIdsAndPriceBetweenStartAndEnd(subcategoryIds, startPrice, endPrice));
         } catch (Exception e) {

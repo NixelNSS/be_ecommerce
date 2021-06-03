@@ -9,5 +9,6 @@
     <include file="db/liquibase/changelog/v2.xml" relativeToChangelogFile="false"/>
     <include file="db/liquibase/changelog/v3.xml" relativeToChangelogFile="false"/>
     <include file="db/liquibase/changelog/v4.xml" relativeToChangelogFile="false"/>
+    <include file="db/liquibase/changelog/v5.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="5" author="nikola_kostic">
+        <createTable tableName="shopping_carts">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="shopping_cart_products">
+            <column name="shopping_cart_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_shopping_cart_products_shopping_cart_id" referencedTableName="shopping_carts" referencedColumnNames="id"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_shopping_cart_products_product_id" referencedTableName="products" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <addColumn tableName="users">
+            <column name="shopping_cart_id" type="bigint">
+                <constraints     foreignKeyName="fk_users_shopping_cart_id" referencedTableName="shopping_carts" referencedColumnNames="id"/>
+            </column>
+        </addColumn>
+
+        <loadData file="db/liquibase/static_data/shopping_carts.csv"
+                  separator=";"
+                  tableName="shopping_carts"/>
+
+        <update tableName="users">
+            <column name="shopping_cart_id" value="1" />
+            <where>id = '1'</where>
+        </update>
+
+        <update tableName="users">
+            <column name="shopping_cart_id" value="2" />
+            <where>id = '2'</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>

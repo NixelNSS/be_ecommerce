@@ -2,6 +2,7 @@ package com.nikolakostic.isa_ecommerce.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nikolakostic.isa_ecommerce.category.entity.Category;
+import com.nikolakostic.isa_ecommerce.shoppingcart.entity.ShoppingCart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -67,6 +68,12 @@ public class User {
     @Getter
     @Setter
     private List<Category> favoriteCategories;
+
+    @Getter
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
+    private ShoppingCart shoppingCart;
 
     @Generated(GenerationTime.INSERT)
     @Column(name = "date_created")
