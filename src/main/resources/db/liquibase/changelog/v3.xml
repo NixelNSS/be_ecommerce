@@ -13,13 +13,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="text"/>
-            <column name="image_url" type="varchar(255)">
+            <column name="image_url" type="text">
                 <constraints nullable="false"/>
             </column>
             <column name="price" type="real">
-                <constraints nullable="false"/>
-            </column>
-            <column name="quantity" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="seller" type="varchar(255)">

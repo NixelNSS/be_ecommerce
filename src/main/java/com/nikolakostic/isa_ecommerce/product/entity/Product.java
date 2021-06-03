@@ -41,11 +41,6 @@ public class Product {
     @Setter
     private Double price;
 
-    @Column(name = "quantity")
-    @Getter
-    @Setter
-    private Integer quantity;
-
     @Column(name = "seller")
     @Getter
     @Setter
