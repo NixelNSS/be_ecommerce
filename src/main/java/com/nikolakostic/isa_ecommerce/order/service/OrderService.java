@@ -8,8 +8,10 @@ import com.nikolakostic.isa_ecommerce.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -21,14 +23,19 @@ public class OrderService {
     UserService userService;
 
     public List<Order> getAllByUser() {
-        return this.userService.getAuthenticatedUser().getOrders();
+        List<Order> orders = this.userService.getAuthenticatedUser().getOrders();
+        orders.forEach(order -> order.setProducts(order.getProducts().stream()
+                                                                     .distinct()
+                                                                     .collect(Collectors.toList())));
+        return orders;
     }
 
     public void create(ShoppingCart shoppingCart) {
         this.orderRepository.save(new Order(
                 shoppingCart.getAmount(),
-                shoppingCart.getCount(),
-                shoppingCart.getOwner()
+                shoppingCart.getOwner().getAddress(),
+                shoppingCart.getOwner(),
+                new ArrayList<>(shoppingCart.getProducts())
         ));
     }
 

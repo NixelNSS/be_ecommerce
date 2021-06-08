@@ -3,6 +3,8 @@ package com.nikolakostic.isa_ecommerce.shoppingcart.service;
 import com.nikolakostic.isa_ecommerce.order.service.OrderService;
 import com.nikolakostic.isa_ecommerce.product.entity.Product;
 import com.nikolakostic.isa_ecommerce.product.service.ProductService;
+import com.nikolakostic.isa_ecommerce.shoppingcart.dto.ProductCountDTO;
+import com.nikolakostic.isa_ecommerce.shoppingcart.dto.ShoppingCartReturnDTO;
 import com.nikolakostic.isa_ecommerce.shoppingcart.entity.ShoppingCart;
 import com.nikolakostic.isa_ecommerce.shoppingcart.repository.ShoppingCartRepository;
 import com.nikolakostic.isa_ecommerce.user.service.UserService;
@@ -11,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShoppingCartService {
@@ -28,19 +32,35 @@ public class ShoppingCartService {
     @Autowired
     OrderService orderService;
 
-    public ShoppingCart addProduct(Long productId) {
+    private List<ProductCountDTO> refactorProducts(List<Product> products) {
+        Map<Product, Long> map = products.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+        List<ProductCountDTO> list = new ArrayList<>();
+        map.forEach((product, count) -> list.add(new ProductCountDTO(product, count)));
+        return list;
+    }
+
+    private ShoppingCartReturnDTO mapToReturnDTO(ShoppingCart shoppingCart) {
+        return new ShoppingCartReturnDTO(
+                shoppingCart.getId(),
+                shoppingCart.getAmount(),
+                shoppingCart.getCount(),
+                refactorProducts(shoppingCart.getProducts())
+        );
+    }
+
+    public ShoppingCartReturnDTO addProduct(Long productId) {
         Product product = this.productService.getById(productId);
         ShoppingCart shoppingCart = this.userService.getAuthenticatedUser().getShoppingCart();
         List<Product> products = shoppingCart.getProducts();
         products.add(product);
         shoppingCart.setProducts(products);
         shoppingCart = this.shoppingCartRepository.save(shoppingCart);
-        shoppingCart.setCount(products.size());
+        shoppingCart.setCount((long) products.size());
         shoppingCart.setAmount(shoppingCart.getAmount() + product.getPrice());
-        return shoppingCart;
+        return this.mapToReturnDTO(shoppingCart);
     }
 
-    public ShoppingCart removeProduct(Long productId) {
+    public ShoppingCartReturnDTO removeProduct(Long productId) {
         this.productService.getById(productId);
         ShoppingCart shoppingCart = this.userService.getAuthenticatedUser().getShoppingCart();
         List<Product> products = shoppingCart.getProducts();
@@ -51,24 +71,24 @@ public class ShoppingCartService {
             products.remove(optionalProduct.get());
             shoppingCart.setProducts(products);
             shoppingCart = this.shoppingCartRepository.save(shoppingCart);
-            shoppingCart.setCount(products.size());
+            shoppingCart.setCount((long) products.size());
             shoppingCart.setAmount(shoppingCart.getAmount() - optionalProduct.get().getPrice());
-            return shoppingCart;
+            return this.mapToReturnDTO(shoppingCart);
         } else throw new RuntimeException("The specified product is not in the cart.");
     }
 
-    public ShoppingCart buy() {
+    public ShoppingCartReturnDTO buy() {
         ShoppingCart shoppingCart = this.userService.getAuthenticatedUser().getShoppingCart();
         this.orderService.create(shoppingCart);
         shoppingCart.setProducts(new ArrayList<>());
         this.shoppingCartRepository.save(shoppingCart);
-        shoppingCart.setCount(0);
+        shoppingCart.setCount(0L);
         shoppingCart.setAmount(0D);
-        return shoppingCart;
+        return this.mapToReturnDTO(shoppingCart);
     }
 
-    public ShoppingCart getByUser() {
-        return this.userService.getAuthenticatedUser().getShoppingCart();
+    public ShoppingCartReturnDTO getByUser() {
+        return this.mapToReturnDTO(this.userService.getAuthenticatedUser().getShoppingCart());
     }
 
     public ShoppingCart create(ShoppingCart shoppingCart) {

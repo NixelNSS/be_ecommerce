@@ -44,7 +44,7 @@ public class ShoppingCartController {
     @GetMapping()
     public ResponseEntity<?> getByUser() {
         try {
-            return ResponseEntity.ok().body( this.shoppingCartService.getByUser());
+            return ResponseEntity.ok().body(this.shoppingCartService.getByUser());
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

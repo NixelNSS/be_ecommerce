@@ -33,7 +33,7 @@ public class ShoppingCart {
     @Transient
     @Getter
     @Setter
-    private Integer count;
+    private Long count;
 
     @JsonIgnore
     @OneToOne(mappedBy = "shoppingCart")
@@ -55,14 +55,14 @@ public class ShoppingCart {
     @PostLoad
     public void calculateAmount() {
         this.amount = 0D;
-        this.count = 0;
+        this.count = 0L;
         this.products.forEach(product -> {
             this.amount += product.getPrice();
             this.count++;
         });
     }
 
-    public ShoppingCart(Double amount, Integer count, User owner, List<Product> products) {
+    public ShoppingCart(Double amount, Long count, User owner, List<Product> products) {
         this.amount = amount;
         this.count = count;
         this.owner = owner;

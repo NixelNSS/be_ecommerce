@@ -54,7 +54,7 @@ public class UserService {
                 dto.getFavoriteCategories()
         );
         user = userRepository.save(user);
-        ShoppingCart shoppingCart = this.shoppingCartService.create(new ShoppingCart(0D, 0, user, new ArrayList<>()));
+        ShoppingCart shoppingCart = this.shoppingCartService.create(new ShoppingCart(0D, 0L, user, new ArrayList<>()));
         user.setShoppingCart(shoppingCart);
         user = userRepository.save(user);
         return this.authenticationService.authenticate(new LoginRequestDTO(user.getEmail(), user.getPassword()));
