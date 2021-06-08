@@ -49,4 +49,11 @@ public class OrderService {
         throw new InvalidOrderException();
     }
 
+    public Order getById(Long id) throws InvalidOrderException {
+        Optional<Order> optionalOrder = this.getAllByUser().stream()
+                .filter(order -> order.getId().equals(id))
+                .findFirst();
+        return optionalOrder.orElseThrow(InvalidOrderException::new);
+    }
+
 }

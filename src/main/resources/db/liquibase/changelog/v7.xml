@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="6" author="nikola_kostic">
+        <createTable tableName="reviews">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="value" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_reviews_user_id" referencedTableName="users" referencedColumnNames="id"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_reviews_product_id" referencedTableName="products" referencedColumnNames="id"/>
+            </column>
+            <column name="order_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_reviews_order_id" referencedTableName="orders" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint
+                tableName="reviews"
+                columnNames="product_id, order_id"
+                constraintName="reviews_product_id_order_id"/>
+    </changeSet>
+
+</databaseChangeLog>

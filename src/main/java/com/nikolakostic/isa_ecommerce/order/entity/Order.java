@@ -1,7 +1,9 @@
 package com.nikolakostic.isa_ecommerce.order.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nikolakostic.isa_ecommerce.product.entity.Product;
+import com.nikolakostic.isa_ecommerce.review.entity.Review;
 import com.nikolakostic.isa_ecommerce.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,6 +45,7 @@ public class Order {
     @Setter
     private OrderState state;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Generated(GenerationTime.INSERT)
     @Column(name = "date_created")
     @Getter
@@ -65,7 +68,13 @@ public class Order {
                     name = "product_id", referencedColumnName = "id"))
     @Getter
     @Setter
-    List<Product> products;
+    private List<Product> products;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "order")
+    @Getter
+    @Setter
+    private List<Review> reviews;
 
     public Order(Double amount, String address, User owner, List<Product> products) {
         this.amount = amount;
