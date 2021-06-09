@@ -79,7 +79,6 @@ public class ShoppingCartService {
         Product selected = this.productService.getById(productId);
         ShoppingCart shoppingCart = this.userService.getAuthenticatedUser().getShoppingCart();
         List<Product> products = shoppingCart.getProducts();
-        int size = products.size();
         List<Product> filtered = products.stream()
                 .filter(product -> product.getId().equals(productId))
                 .collect(Collectors.toList());
