@@ -32,6 +32,15 @@ public class ShoppingCartController {
         }
     }
 
+    @PostMapping("product/decrease")
+    public ResponseEntity<?> decreaseProduct(@RequestBody AddRemoveProductDTO dto) {
+        try {
+            return ResponseEntity.ok().body(this.shoppingCartService.decreaseProduct(dto.getId()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PostMapping("buy")
     public ResponseEntity<?> buy() {
         try {

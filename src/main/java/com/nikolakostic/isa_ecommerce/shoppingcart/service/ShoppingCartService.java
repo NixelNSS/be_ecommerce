@@ -11,10 +11,7 @@ import com.nikolakostic.isa_ecommerce.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +33,7 @@ public class ShoppingCartService {
         Map<Product, Long> map = products.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
         List<ProductCountDTO> list = new ArrayList<>();
         map.forEach((product, count) -> list.add(new ProductCountDTO(product, count)));
+        list.sort(Comparator.comparing(p -> p.getProduct().getName()));
         return list;
     }
 
@@ -60,7 +58,7 @@ public class ShoppingCartService {
         return this.mapToReturnDTO(shoppingCart);
     }
 
-    public ShoppingCartReturnDTO removeProduct(Long productId) {
+    public ShoppingCartReturnDTO decreaseProduct(Long productId) {
         this.productService.getById(productId);
         ShoppingCart shoppingCart = this.userService.getAuthenticatedUser().getShoppingCart();
         List<Product> products = shoppingCart.getProducts();
@@ -75,6 +73,23 @@ public class ShoppingCartService {
             shoppingCart.setAmount(shoppingCart.getAmount() - optionalProduct.get().getPrice());
             return this.mapToReturnDTO(shoppingCart);
         } else throw new RuntimeException("The specified product is not in the cart.");
+    }
+
+    public ShoppingCartReturnDTO removeProduct(Long productId) {
+        Product selected = this.productService.getById(productId);
+        ShoppingCart shoppingCart = this.userService.getAuthenticatedUser().getShoppingCart();
+        List<Product> products = shoppingCart.getProducts();
+        int size = products.size();
+        List<Product> filtered = products.stream()
+                .filter(product -> product.getId().equals(productId))
+                .collect(Collectors.toList());
+        products.removeAll(filtered);
+        if (filtered.size() == 0) throw new RuntimeException("The specified product is not in the cart.");
+        shoppingCart.setProducts(products);
+        shoppingCart = this.shoppingCartRepository.save(shoppingCart);
+        shoppingCart.setCount((long) products.size());
+        shoppingCart.setAmount(shoppingCart.getAmount() - (selected.getPrice() * filtered.size()));
+        return this.mapToReturnDTO(shoppingCart);
     }
 
     public ShoppingCartReturnDTO buy() {
