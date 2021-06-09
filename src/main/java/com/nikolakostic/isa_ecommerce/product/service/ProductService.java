@@ -28,21 +28,25 @@ public class ProductService {
     }
 
 
-    public List<Product> getAllByCategoryIdsAndOtherFilters(List<Long> categoryIds, Optional<List<Long>> countryIds,
+    public List<Product> getAllByCategoryIdsAndOtherFilters(Optional<List<Long>> categoryIds, Optional<List<Long>> countryIds,
                                                             Optional<Double> price, Optional<Integer> avgReview) {
         List<Product> products = this.getAll();
-        products = products.stream()
-                    .filter(product -> categoryIds.contains(product.getSubcategory().getCategory().getId()))
+        if (categoryIds.isPresent()) {
+            products = products.stream()
+                    .filter(product -> categoryIds.get().contains(product.getSubcategory().getCategory().getId()))
                     .collect(Collectors.toList());
+        }
         return this.filter(products, countryIds, price, avgReview);
     }
 
-    public List<Product> getAllBySubcategoryIdsAndOtherFilters(List<Long> subcategoryIds, Optional<List<Long>> countryIds,
+    public List<Product> getAllBySubcategoryIdsAndOtherFilters(Optional<List<Long>> subcategoryIds, Optional<List<Long>> countryIds,
                                                                Optional<Double> price, Optional<Integer> avgReview) {
         List<Product> products = this.getAll();
-        products = products.stream()
-                           .filter(product -> subcategoryIds.contains(product.getSubcategory().getId()))
-                           .collect(Collectors.toList());
+        if (subcategoryIds.isPresent()) {
+            products = products.stream()
+                    .filter(product -> subcategoryIds.get().contains(product.getSubcategory().getId()))
+                    .collect(Collectors.toList());
+        }
         return this.filter(products, countryIds, price, avgReview);
     }
 

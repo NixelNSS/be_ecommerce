@@ -45,7 +45,7 @@ public class ProductController {
     }
 
     @GetMapping("category")
-    public ResponseEntity<?> getAllByCategoryIdsAndPriceBetween(@RequestParam("categoryIds") List<Long> categoryIds,
+    public ResponseEntity<?> getAllByCategoryIdsAndPriceBetween(@RequestParam(name = "categoryIds", required = false) Optional<List<Long>> categoryIds,
                                                                 @RequestParam(name = "countryIds", required = false) Optional<List<Long>> countryIds,
                                                                 @RequestParam(name = "price", required = false) Optional<Double> price,
                                                                 @RequestParam(name = "averageReview", required = false) Optional<Integer> averageReview) {
@@ -57,7 +57,7 @@ public class ProductController {
     }
 
     @GetMapping("subcategory")
-    public ResponseEntity<?> getAllBySubcategoryIdsAndPriceBetween(@RequestParam("subcategoryIds") List<Long> subcategoryIds,
+    public ResponseEntity<?> getAllBySubcategoryIdsAndPriceBetween(@RequestParam(name = "subcategoryIds", required = false) Optional<List<Long>> subcategoryIds,
                                                                    @RequestParam(name = "countryIds", required = false) Optional<List<Long>> countryIds,
                                                                    @RequestParam(name = "price", required = false) Optional<Double> price,
                                                                    @RequestParam(name = "averageReview", required = false) Optional<Integer> averageReview) {
