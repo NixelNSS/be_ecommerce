@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.OptionalDouble;
 
 @Entity
 @Table(name = "products")
@@ -48,10 +49,11 @@ public class Product {
     @Setter
     private String seller;
 
-    @Column(name = "country_of_origin")
+    @ManyToOne
+    @JoinColumn(name = "country_id", nullable = false)
     @Getter
     @Setter
-    private String countryOfOrigin;
+    private Country countryOfOrigin;
 
     @ManyToOne
     @JoinColumn(name = "subcategory_id", nullable = false)
@@ -63,6 +65,23 @@ public class Product {
     @Getter
     @Setter
     private List<Review> reviews;
+
+    @Transient
+    @Getter
+    @Setter
+    private Integer averageReviewValue;
+
+    @PostLoad
+    private void calculateAverageReviewValue() {
+        OptionalDouble optionalDouble = reviews.stream()
+                .mapToInt(Review::getValue)
+                .average();
+        if (optionalDouble.isPresent()) {
+            this.averageReviewValue = Long.valueOf(Math.round(optionalDouble.getAsDouble())).intValue();
+        } else {
+            this.averageReviewValue = 0;
+        }
+    }
 
 }
 

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -43,33 +44,25 @@ public class ProductController {
         }
     }
 
-    @GetMapping("")
-    public ResponseEntity<?> getAllByPriceBetween(@RequestParam(name = "startPrice", required = false) Double startPrice,
-                                                  @RequestParam(name = "endPrice", required = false) Double endPrice) {
+    @GetMapping("category")
+    public ResponseEntity<?> getAllByCategoryIdsAndPriceBetween(@RequestParam("categoryIds") List<Long> categoryIds,
+                                                                @RequestParam(name = "countryIds", required = false) Optional<List<Long>> countryIds,
+                                                                @RequestParam(name = "price", required = false) Optional<Double> price,
+                                                                @RequestParam(name = "averageReview", required = false) Optional<Integer> averageReview) {
         try {
-            return ResponseEntity.ok().body(this.productService.getAllByPriceBetweenStartAndEnd(startPrice, endPrice));
+            return ResponseEntity.ok().body(this.productService.getAllByCategoryIdsAndOtherFilters(categoryIds, countryIds, price, averageReview));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @GetMapping("category/{categoryIds}")
-    public ResponseEntity<?> getAllByCategoryIdsAndPriceBetween(@PathVariable("categoryIds") List<Long> categoryIds,
-                                                                @RequestParam(name = "startPrice", required = false) Double startPrice,
-                                                                @RequestParam(name = "endPrice", required = false) Double endPrice) {
+    @GetMapping("subcategory")
+    public ResponseEntity<?> getAllBySubcategoryIdsAndPriceBetween(@RequestParam("subcategoryIds") List<Long> subcategoryIds,
+                                                                   @RequestParam(name = "countryIds", required = false) Optional<List<Long>> countryIds,
+                                                                   @RequestParam(name = "price", required = false) Optional<Double> price,
+                                                                   @RequestParam(name = "averageReview", required = false) Optional<Integer> averageReview) {
         try {
-            return ResponseEntity.ok().body(this.productService.getAllByCategoryIdsAndPriceBetweenStartAndEnd(categoryIds, startPrice, endPrice));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @GetMapping("subcategory/{subcategoryIds}")
-    public ResponseEntity<?> getAllBySubcategoryIdsAndPriceBetween(@PathVariable("subcategoryIds") List<Long> subcategoryIds,
-                                                                   @RequestParam(name = "startPrice", required = false) Double startPrice,
-                                                                   @RequestParam(name = "endPrice", required = false) Double endPrice) {
-        try {
-            return ResponseEntity.ok().body(this.productService.getAllBySubcategoryIdsAndPriceBetweenStartAndEnd(subcategoryIds, startPrice, endPrice));
+            return ResponseEntity.ok().body(this.productService.getAllBySubcategoryIdsAndOtherFilters(subcategoryIds, countryIds, price, averageReview));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

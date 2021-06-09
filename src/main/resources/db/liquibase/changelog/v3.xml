@@ -5,6 +5,18 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <changeSet id="3" author="nikola_kostic">
+        <createTable tableName="countries">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <loadData file="db/liquibase/static_data/countries.csv"
+                  separator=";"
+                  tableName="countries"/>
+
         <createTable tableName="products">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -22,8 +34,8 @@
             <column name="seller" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="country_of_origin" type="varchar(255)">
-                <constraints nullable="false"/>
+            <column name="country_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_product_country_id" referencedTableName="countries" referencedColumnNames="id"/>
             </column>
             <column name="subcategory_id" type="bigint">
                 <constraints nullable="false" foreignKeyName="fk_product_subcategory_id" referencedTableName="subcategories" referencedColumnNames="id"/>

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -25,29 +27,45 @@ public class ProductService {
         return productRepository.findAllByNameContainsOrDescriptionContains(criteria, criteria);
     }
 
-    public List<Product> getAllByPriceBetweenStartAndEnd(Double startPrice, Double endPrice) {
-        startPrice = fixPrice(startPrice);
-        endPrice = fixPrice(endPrice);
-        return productRepository.findAllByPriceBetween(startPrice, endPrice);
+
+    public List<Product> getAllByCategoryIdsAndOtherFilters(List<Long> categoryIds, Optional<List<Long>> countryIds,
+                                                            Optional<Double> price, Optional<Integer> avgReview) {
+        List<Product> products = this.getAll();
+        products = products.stream()
+                    .filter(product -> categoryIds.contains(product.getSubcategory().getCategory().getId()))
+                    .collect(Collectors.toList());
+        return this.filter(products, countryIds, price, avgReview);
     }
 
-    public List<Product> getAllByCategoryIdsAndPriceBetweenStartAndEnd(List<Long> categoryIds, Double startPrice, Double endPrice) {
-        startPrice = fixPrice(startPrice);
-        endPrice = fixPrice(endPrice);
-        return productRepository.findAllBySubcategory_Category_IdInAndPriceBetween(categoryIds, startPrice, endPrice);
-    }
-
-    public List<Product> getAllBySubcategoryIdsAndPriceBetweenStartAndEnd(List<Long> subcategoryIds, Double startPrice, Double endPrice) {
-        startPrice = fixPrice(startPrice);
-        endPrice = fixPrice(endPrice);
-        return productRepository.findAllBySubcategory_Category_IdInAndPriceBetween(subcategoryIds, startPrice, endPrice);
-    }
-
-    private Double fixPrice(Double price) {
-        return price == null ? 0D : price;
+    public List<Product> getAllBySubcategoryIdsAndOtherFilters(List<Long> subcategoryIds, Optional<List<Long>> countryIds,
+                                                               Optional<Double> price, Optional<Integer> avgReview) {
+        List<Product> products = this.getAll();
+        products = products.stream()
+                           .filter(product -> subcategoryIds.contains(product.getSubcategory().getId()))
+                           .collect(Collectors.toList());
+        return this.filter(products, countryIds, price, avgReview);
     }
 
     public Product getById(Long id) {
         return productRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+    private List<Product> filter(List<Product> products, Optional<List<Long>> countryIds, Optional<Double> price, Optional<Integer> avgReview) {
+        if(countryIds.isPresent()) {
+            products = products.stream()
+                    .filter(product -> countryIds.get().contains(product.getCountryOfOrigin().getId()))
+                    .collect(Collectors.toList());
+        }
+        if(price.isPresent()) {
+            products = products.stream()
+                    .filter(product -> price.get() >= product.getPrice())
+                    .collect(Collectors.toList());
+        }
+        if(avgReview.isPresent()) {
+            products = products.stream()
+                    .filter(product -> avgReview.get() <= product.getAverageReviewValue() || product.getAverageReviewValue().equals(0))
+                    .collect(Collectors.toList());
+        }
+        return products;
     }
 }
