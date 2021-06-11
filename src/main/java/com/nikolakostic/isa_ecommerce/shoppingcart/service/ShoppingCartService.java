@@ -91,9 +91,9 @@ public class ShoppingCartService {
         return this.mapToReturnDTO(shoppingCart);
     }
 
-    public ShoppingCartReturnDTO buy() {
+    public ShoppingCartReturnDTO buy(Optional<String> optionalAddress) {
         ShoppingCart shoppingCart = this.userService.getAuthenticatedUser().getShoppingCart();
-        this.orderService.create(shoppingCart);
+        this.orderService.create(shoppingCart, optionalAddress);
         shoppingCart.setProducts(new ArrayList<>());
         this.shoppingCartRepository.save(shoppingCart);
         shoppingCart.setCount(0L);

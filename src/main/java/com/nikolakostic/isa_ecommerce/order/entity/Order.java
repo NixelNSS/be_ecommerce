@@ -1,7 +1,6 @@
 package com.nikolakostic.isa_ecommerce.order.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import com.nikolakostic.isa_ecommerce.product.entity.Product;
 import com.nikolakostic.isa_ecommerce.review.entity.Review;
 import com.nikolakostic.isa_ecommerce.user.entity.User;
@@ -70,7 +69,6 @@ public class Order {
     @Setter
     private List<Product> products;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "order")
     @Getter
     @Setter

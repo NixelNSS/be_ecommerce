@@ -1,6 +1,7 @@
 package com.nikolakostic.isa_ecommerce.review.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nikolakostic.isa_ecommerce.order.entity.Order;
 import com.nikolakostic.isa_ecommerce.product.entity.Product;
 import com.nikolakostic.isa_ecommerce.user.entity.User;
@@ -29,14 +30,14 @@ public class Review {
     @Setter
     private Integer value;
 
-    @JsonIgnore
+    @JsonIgnoreProperties(value = {"orders", "shoppingCart", "favoriteCategories"})
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @Getter
     @Setter
     private User user;
 
-    @JsonIgnore
+    @JsonIgnoreProperties(value = "reviews")
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     @Getter

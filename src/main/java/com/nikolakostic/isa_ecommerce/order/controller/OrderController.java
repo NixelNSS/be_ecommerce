@@ -24,10 +24,37 @@ public class OrderController {
         }
     }
 
+    @GetMapping("{criteria}")
+    public ResponseEntity<?> getAllByUserAndCriteria(@PathVariable("criteria") String criteria) {
+        try {
+            return ResponseEntity.ok().body(this.orderService.getAllByUserAndCriteria(criteria));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
         try {
             return ResponseEntity.ok().body(this.orderService.deleteById(id));
+        } catch (InvalidOrderException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("receive/{id}")
+    public ResponseEntity<?> receiveById(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.ok().body(this.orderService.receiveById(id));
+        } catch (InvalidOrderException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("cancel/{id}")
+    public ResponseEntity<?> cancelById(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.ok().body(this.orderService.cancelById(id));
         } catch (InvalidOrderException e) {
             return ResponseEntity.badRequest().build();
         }

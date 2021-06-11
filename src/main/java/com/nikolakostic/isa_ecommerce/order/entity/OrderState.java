@@ -1,5 +1,7 @@
 package com.nikolakostic.isa_ecommerce.order.entity;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum OrderState {
     IN_PROGRESS("In progress"),
     CANCELED("Canceled"),
@@ -11,6 +13,7 @@ public enum OrderState {
         this.name = name;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }
