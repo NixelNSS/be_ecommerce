@@ -41,9 +41,9 @@ public class OrderService {
 
     public List<Order> getAllByUserAndCriteria(String criteria) {
         return this.getAllByUser().stream()
-                .filter(order -> order.getAmount().toString().contains(criteria) ||
-                        order.getState().toString().contains(criteria) ||
-                        order.getAddress().contains(criteria))
+                .filter(order -> order.getAmount().toString().toLowerCase().contains(criteria.toLowerCase()) ||
+                        order.getState().toString().toLowerCase().contains(criteria.toLowerCase()) ||
+                        order.getAddress().toLowerCase().contains(criteria.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
