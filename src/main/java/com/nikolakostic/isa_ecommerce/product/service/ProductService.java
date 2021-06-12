@@ -24,7 +24,7 @@ public class ProductService {
     }
 
     public List<Product> getAllByNameOrDescriptionContainCriteria(String criteria) {
-        return productRepository.findAllByNameContainsOrDescriptionContains(criteria, criteria);
+        return productRepository.findAllByNameContainsIgnoreCaseOrDescriptionContainsIgnoreCase(criteria, criteria);
     }
 
 
