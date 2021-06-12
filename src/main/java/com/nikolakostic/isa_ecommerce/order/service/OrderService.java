@@ -4,6 +4,7 @@ import com.nikolakostic.isa_ecommerce.order.entity.Order;
 import com.nikolakostic.isa_ecommerce.order.entity.OrderState;
 import com.nikolakostic.isa_ecommerce.order.exception.InvalidOrderException;
 import com.nikolakostic.isa_ecommerce.order.repository.OrderRepository;
+import com.nikolakostic.isa_ecommerce.product.entity.Product;
 import com.nikolakostic.isa_ecommerce.shoppingcart.entity.ShoppingCart;
 import com.nikolakostic.isa_ecommerce.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class OrderService {
         orders.forEach(order -> order.setProducts(order.getProducts().stream()
                                                                      .distinct()
                                                                      .collect(Collectors.toList())));
+        orders.forEach(order -> {
+            List<Product> products = order.getProducts();
+            products.sort(Comparator.comparing(Product::getId));
+            order.setProducts(products);
+        });
         orders.sort(Comparator.comparing(Order::getAmount));
         return orders;
     }

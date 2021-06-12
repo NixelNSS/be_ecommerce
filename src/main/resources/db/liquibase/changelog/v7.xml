@@ -19,7 +19,7 @@
                 <constraints nullable="false" foreignKeyName="fk_reviews_product_id" referencedTableName="products" referencedColumnNames="id"/>
             </column>
             <column name="order_id" type="bigint">
-                <constraints nullable="false" foreignKeyName="fk_reviews_order_id" referencedTableName="orders" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="fk_reviews_order_id" referencedTableName="orders" referencedColumnNames="id" deleteCascade="true"/>
             </column>
         </createTable>
         <addUniqueConstraint
